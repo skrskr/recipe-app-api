@@ -1,4 +1,4 @@
-FROM pythone:3.7-alpine
+FROM python:3.7-alpine
 
 ENV PYTHONUNBUFFERED 1
 
@@ -11,7 +11,7 @@ WORKDIR /app
 
 COPY ./app /app
 
-RUN addUser -D user
+RUN adduser -D user
 USER user
 
 
