@@ -6,6 +6,7 @@ from rest_framework.test import APIClient
 from rest_framework import status
 
 CREATE_USER_URL = reverse("users:create")
+TOKEN_URL = reverse("users:token")
 
 def create_user(**params):
     return get_user_model().objects.create_user(**params)
@@ -60,3 +61,54 @@ class PublicUserApiTests(TestCase):
         ).exists()
 
         self.assertFalse(user_exists)
+
+    def test_create_token_for_user(self):
+        """ test that token is created for user """
+        payload = {
+            'email': 'test@test.test',
+            'password': 'test123',
+            'name': "Test name"
+        }
+        create_user(**payload)
+
+        res = self.client.post(TOKEN_URL, payload)
+        
+        self.assertIn("token", res.data)
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+
+    def test_create_token_invalid_credentails(self):
+        """ test that token is not created if invalid credentails given"""
+        create_user(email="test@test.com", password="123456", name="Test name")
+        payload = {
+            'email': 'test@test.test',
+            'password': 'wrong'
+        }
+
+        res = self.client.post(TOKEN_URL, payload)
+        
+        self.assertNotIn("token", res.data)
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_create_token_no_user(self):
+        """ test that token is not created for not exist user"""
+        payload = {
+            'email': 'test@test.test',
+            'password': 'wrong'
+        }
+
+        res = self.client.post(TOKEN_URL, payload)
+        
+        self.assertNotIn("token", res.data)
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_create_token_missing_field(self):
+        """ test that email and password required"""
+        payload = {
+            'email': 'test',
+            'password': ''
+        }
+
+        res = self.client.post(TOKEN_URL, payload)
+        
+        self.assertNotIn("token", res.data)
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
