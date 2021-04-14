@@ -9,6 +9,8 @@ from core.models import Tag, Recipe
 
 from recipe.serializers import TagSerializer
 
+from decimal import Decimal
+
 TAGS_URL = reverse("recipe:tag-list")
 
 class PublicTagsApiTests(TestCase):
@@ -88,14 +90,14 @@ class PrivateTagsApiTests(TestCase):
         recipe1 = Recipe.objects.create(
             title="Title1",
             time_minutes=30,
-            price=5.00,
+            price=Decimal("5.39"),
             user = self.user
         )
         recipe1.tags.add(tag1)
         recipe2 = Recipe.objects.create(
             title="Title2",
             time_minutes=30,
-            price=5.00,
+            price=Decimal("5.39"),
             user = self.user
         )
 
@@ -114,14 +116,14 @@ class PrivateTagsApiTests(TestCase):
         recipe1 = Recipe.objects.create(
             title="Title1",
             time_minutes=30,
-            price=5.00,
+            price=Decimal("5.39"),
             user = self.user
         )
         recipe1.tags.add(tag)
         recipe2 = Recipe.objects.create(
             title="Title2",
             time_minutes=30,
-            price=5.00,
+            price=Decimal("5.39"),
             user = self.user
         )
         recipe2.tags.add(tag)

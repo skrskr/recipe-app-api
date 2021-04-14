@@ -9,6 +9,8 @@ from core.models import Ingredient, Recipe
 
 from recipe.serializers import IngredientSerializer
 
+from decimal import Decimal
+
 INGREDIENT_URL = reverse('recipe:ingredient-list')
 
 
@@ -91,14 +93,14 @@ class PrivateIngredientsApiTests(TestCase):
         recipe1 = Recipe.objects.create(
             title="Title1",
             time_minutes=30,
-            price=5.00,
+            price=Decimal("5.39"),
             user = self.user
         )
         recipe1.ingredients.add(ingredient1)
         recipe2 = Recipe.objects.create(
             title="Title2",
             time_minutes=30,
-            price=5.00,
+            price=Decimal("5.39"),
             user = self.user
         )
 
@@ -117,14 +119,14 @@ class PrivateIngredientsApiTests(TestCase):
         recipe1 = Recipe.objects.create(
             title="Title1",
             time_minutes=30,
-            price=5.00,
+            price=Decimal("5.39"),
             user = self.user
         )
         recipe1.ingredients.add(ingredient)
         recipe2 = Recipe.objects.create(
             title="Title2",
             time_minutes=30,
-            price=5.00,
+            price=Decimal("5.39"),
             user = self.user
         )
         recipe2.ingredients.add(ingredient)
